@@ -32,6 +32,7 @@ type (
 //     Other techniques include nested CAR in sections which has its own headaches.
 //     For now, require SPs to support HTTP piece retrieval.
 
+//lint:ignore U1000 WIP
 func newHttpPieceRetriever(j *Jiffy) (*httpPieceRetriever, error) {
 	return &httpPieceRetriever{j: j}, nil
 }
@@ -47,7 +48,7 @@ func (s *httpPieceRetriever) Retrieve(ctx context.Context, pi abi.PieceInfo) (io
 	}
 
 	// Pick a replica as candidate to retrieve from
-	for _, _ = range replicas {
+	for range replicas {
 		// TODO for each replica check status and pick an active one.
 	}
 
@@ -66,6 +67,7 @@ func (s *httpPieceRetriever) Retrieve(ctx context.Context, pi abi.PieceInfo) (io
 		return nil, err
 	}
 	for _, protocol := range transports.Protocols {
+		//lint:ignore SA9003 WIP
 		if protocol.Name == "http" {
 			// might support /ipfs trustless gateway
 			// might suport /piece
