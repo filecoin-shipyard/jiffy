@@ -94,16 +94,23 @@ func (r *Replica) MatchesProposalOnChain() bool {
 func (r *Replica) Status(head abi.ChainEpoch) ReplicaStatus {
 	switch {
 	case r.LastProviderStatus == nil:
+		if r.LastError != nil {
+			return Unknown
+		}
 		return Accepted
 	case r.LastChainStatus == nil:
 		// TODO: We could return more detailed status from r.LastChainStatus
 		//       Investigate what would be useful to return.
+		if r.LastError != nil {
+			return Unknown
+		}
 		return Accepted
 	case !r.MatchesProposalOnChain():
+		// We are in an error state where the provider must have returned incorrect data.
 		// TODO: Should we do something more here? if client deal proposal doesn't match the on-chain proposal it means
 		//       the provider must have returned an incorrect deal ID in response to deal status request.
 		//       In which chase, there should be some penalization?
-		return Accepted
+		return Unknown
 	case r.LastChainStatus.State.SlashEpoch > 0:
 		return Slashed
 	case r.LastChainStatus.Proposal.EndEpoch > head:
@@ -113,6 +120,9 @@ func (r *Replica) Status(head abi.ChainEpoch) ReplicaStatus {
 	case r.LastChainStatus.State.SectorStartEpoch > 0:
 		return Active
 	default:
+		if r.LastError != nil {
+			return Unknown
+		}
 		return Accepted
 	}
 }
