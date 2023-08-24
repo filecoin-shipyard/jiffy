@@ -1,46 +1,40 @@
-# :zap: jiffy
+# :zap: **Jiffy**
 
-[![Go Reference](https://pkg.go.dev/badge/github.com/filecoin-shipyard/jiffy.svg)](https://pkg.go.dev/github.com/filecoin-shipyard/jiffy)
-[![Go Test](https://github.com/filecoin-shipyard/jiffy/actions/workflows/go-test.yml/badge.svg)](https://github.com/filecoin-shipyard/jiffy/actions/workflows/go-test.yml)
+> **Just In-Time Filecoin For You**
 
-> Just In-time Filecoin For You
+![Go Reference](https://pkg.go.dev/badge/github.com/filecoin-shipyard/jiffy.svg)
+![Go Test](https://github.com/filecoin-shipyard/jiffy/actions/workflows/go-test.yml/badge.svg)
 
-Jiffy is a system that stores and retrieves arbitrary blobs to/from FileCoin network with highly efficient data preparation mechanism that only scans the data once to prepare data for Filecoin deal making. Jiffy generates piece CID for each uploaded blob, which can then be used as by merkel inclusion proof to prove that a deal indeed contains a given blob. Jiffy also includes a bin-packing mechanism to tightly pack blobs of arbitrary size into 32 GiB Filecoin sectors, and verifies the health of replicas by checking the storage provider and the Filecoin chain.
+Jiffy provides a seamless interface to store and retrieve arbitrary data blobs on the Filecoin network. It offers an efficient data preparation system, ensuring data is scanned just once before being prepped for a Filecoin deal. Each uploaded blob in Jiffy is identified with a unique piece CID, which can be leveraged for merkle inclusion proofs. Additionally, Jiffy's bin-packing mechanism optimizes storage by fitting blobs into full Filecoin sectors and ensures data integrity by checking both the storage provider and the Filecoin chain.
 
-Jiffy API is fully compatible with [Motion](https://github.com/filecoin-project/motion) and comes with [Motion blob store integration](integration/motion).
+Its API is designed to be fully compatible with [Motion](https://github.com/filecoin-project/motion) and includes an integrated [Motion blob store](integration/motion).
 
-## Features
+## **Features**
 
-Jiffy features include:
+- **Arbitrary Blob Management**: Easily store `io.Reader` data on Filecoin and retrieve it as `io.ReadSeekCloser`.
+- **One-Pass Data Preparation**: Processes input data in a single pass for Filecoin storage.
+- **Unique Piece CID for Blobs**: Every stored blob gets its own Piece CID for use in merkle inclusion proofs.
+- **Optimized Bin Packing**: Efficiently packs blobs across sectors to ensure cost-effective storage on Filecoin.
+- **Customizable Replication**: Decide the storage providers and the replication factor for each piece.
+- **Integrated with Motion Blob Store**: Contains a built-in [Motion blob store](integration/motion) implementation.
+- **Efficient Byte-Range Retrieval** (*WIP*): Retrieves data with Boost Piece CID range request and performs on-the-fly content verification.
+- **HTTP Server Offloading** (*WIP*): Routes data to a local HTTP server, authenticated using per deal proposal JWT.
+- **S3-Compatible Offloading** (*WIP*): Allows data routing to any S3-compatible API.
 
-- **Arbitrary Blob storage and retrieval** - Store `io.Reader` onto FileCoin and get `io.ReadSeakCloser` back.
-- **Read-once data preparation** - Reads the input data once to prepare it for storage on Filecoin.
-- **Piece CID per Blob** - Provides a Piece CID per stored blob which can then be used in merkle inclusion proof to prove that a deal contains a blob.
-- **Best-fit bin packing** - Packs blobs as tightly as possible across configurable number of sectors and sector sizes for most cost-effective storage on Filecoin.
-- **Extensible replication control** - Choose which SPs and how many SPs a given piece gets replicated on.
-- **Motion blob store integration** - Includes [Motion blob store](integration/motion) implementation
-- **Efficient byte-range retrieval** - :construction: **WIP** Retrieves data using Boost Piece CID range request and verifies content on the fly when not available locally.
-- **Embedded HTTP server offloading** - :construction: **WIP** Offload data to a local HTTP server with per deal proposal JWT authentication.  
-- **S3-compatible offloading** - :construction: **WIP**  Offload data to an S3-compatible API.
+> [//]: # (TODO: Add a comparative table between Jiffy, RIBS, and Singularity)
+>
+> [//]: # (TODO: Write a section on singularity v3)
 
-[//]: # (TODO: Add a table comparring Jiffy, RIBS and Singularity)
+## **Development Status**
 
-[//]: # (TODO: write up on singularity v3)
+:construction: **Under Active Development** :construction:
 
+We aim to keep the `main` branch stable. However, as this is an evolving project, breaking changes might occur. For production environments, please rely on released versions and always consult the release notes before upgrading.
 
-## Status
+## **Documentation**
 
-:construction: **This repository is under active development.** :construction:
+For an in-depth understanding and integration specifics, refer to the [godoc documentation](https://pkg.go.dev/github.com/filecoin-shipyard/jiffy).
 
-Please be aware that while we strive to keep the master branch stable, breaking changes may be introduced as we push
-forward. We recommend using released versions for production systems and always checking the release notes before
-updating.
+## **License**
 
-## Documentation
-
-For detailed usage and integration guidance, please refer
-to [godoc documentation](https://pkg.go.dev/github.com/filecoin-shipyard/jiffy).
-
-## License
-
-This project is licensed under the MIT and Apache 2.0 Licenses - see the [LICENSE.md](LICENSE.md) file for details.
+This project is dual-licensed under the MIT and Apache 2.0 licenses. For more details, consult the [LICENSE.md](LICENSE.md) file.
